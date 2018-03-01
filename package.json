@@ -1,0 +1,23 @@
+{
+  "name": "private-call",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SunburntRock89/Private-Call.git"
+  },
+  "author": "SunburntRock89",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/SunburntRock89/Private-Call/issues"
+  },
+  "homepage": "https://github.com/SunburntRock89/Private-Call#readme",
+  "dependencies": {
+    "discord.js": "github:Hydrabolt/discord.js",
+    "require-reload": "^0.2.2"
+  }
+}
