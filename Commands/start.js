@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	let privateVC = client.channels.get(private);
-	if (privateVC.members.count >= 1) {
+	if (privateVC.members.size >= 1) {
 		return msg.channel.send({
 			embed: {
 				color: 0xFF0000,
