@@ -41,7 +41,7 @@ client.on("voiceStateUpdate", async(oldMember, newMember) => {
 	if (!newMember.voiceChannel || newMember.voiceChannelID !== config.private) return;
 	let call = currentCall.find(r => r.status === true);
 	if (!call) return;
-	if (call.owner === oldMember.id || call.participants.includes(oldMember.id)) return;
+	if (call.owner === oldMember.id && call.participants.includes(oldMember.id)) return;
 	if (oldMember.voiceChannelID) return newMember.setVoiceChannel(oldMember.voiceChannel);
 	newMember.setVoiceChannel(config.squaddy);
 });
