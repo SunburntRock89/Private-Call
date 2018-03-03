@@ -30,6 +30,20 @@ module.exports = async(client, msg, suffix) => {
 		});
 	}
 
+	let privateVC = client.channels.get(private);
+	if (privateVC.members.count >= 1) {
+		return msg.channel.send({
+			embed: {
+				color: 0xFF0000,
+				title: ":x: Error!",
+				description: "There's people in private already!",
+				footer: {
+					text: `Nice try....`,
+				},
+			},
+		});
+	}
+
 	msg.channel.send({
 		embed: {
 			color: 0x00FF00,
