@@ -38,6 +38,7 @@ client.on("message", async msg => {
 });
 
 client.on("voiceStateUpdate", async(oldMember, newMember) => {
+	console.log("voicestateupdate")
 	if (!newMember.voiceChannel || newMember.voiceChannelID !== config.private) return;
 	let call = currentCall.find(r => r.status === true);
 	if (!call) return;
