@@ -3,6 +3,7 @@ const reload = require("require-reload")(require);
 
 const auth = require("./Configuration/auth.json");
 const config = require("./Configuration/config.json");
+const currentCall = require("./Configuration/currentCall.json");
 
 const client = new Client({
 	disableEveryone: true,
@@ -34,6 +35,13 @@ client.on("message", async msg => {
 	}
 
 	if (cmdFile) return cmdFile(client, msg, suffix);
+});
+
+client.on("voiceStateUpdate", async(oldMember, newMember) => {
+	if (!newMember.voiceChannel || newMember.voiceChannelID !== config.private) return;
+	let call = currentCall.find(r => r.status === true);
+	if (!call) return;
+	newMember.setVoiceChannel(oldMember.voiceChannelID ? oldMember.voiceChannel : config.squaddy);
 });
 
 client.memberSearch = async(string, server, toReturn) => new Promise((resolve, reject) => {
