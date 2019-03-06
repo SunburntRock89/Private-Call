@@ -38,11 +38,11 @@ client.on("message", async msg => {
 });
 
 client.on("voiceStateUpdate", async(oldMember, newMember) => {
-	if (!newMember.voiceChannel || newMember.voiceChannelID !== config.private) return;
+	if (!newMember.voice.channel || newMember.voice.channel.id !== config.private) return;
 	let call = currentCall.find(r => r.status === true);
 	if (!call) return;
 	if (call.owner !== oldMember.user.id || !call.participants.includes(oldMember.user.id)) {
-		if (oldMember.voiceChannelID) return newMember.setVoiceChannel(oldMember.voiceChannel);
+		if (oldMember.voice.channel.id) return newMember.setVoiceChannel(oldMember.voice.channel.id);
 		newMember.setVoiceChannel(config.squaddy);
 	}
 });
@@ -62,7 +62,7 @@ client.memberSearch = async(string, server, toReturn) => new Promise((resolve, r
 	}
 	if (string.lastIndexOf("#") === string.length - 5 && !isNaN(string.substring(string.lastIndexOf("#") + 1))) {
 		foundMember = server.members.filter(member => member.user.username === string.substring(0, string.lastIndexOf("#") + 1))
-		.find(member => member.user.discriminator === string.substring(string.lastIndexOf("#") + 1));
+			.find(member => member.user.discriminator === string.substring(string.lastIndexOf("#") + 1));
 	}
 	if (!foundMember) {
 		foundMember = server.members.find(member => member.user.username.toLowerCase() === string.toLowerCase());

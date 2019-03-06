@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 		});
 	}
 
-	if (msg.member.voiceChannelID === private) {
+	if (msg.member.voice.channel.id === private) {
 		return msg.channel.send({
 			embed: {
 				color: 0xFF0000,

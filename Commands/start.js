@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		});
 	}
-	if (!msg.member.voiceChannel) {
+	if (!msg.member.voice.channel) {
 		return msg.channel.send({
 			embed: {
 				color: 0xFF0000,
