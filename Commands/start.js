@@ -11,9 +11,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "There's already an active private call!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -23,9 +20,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You are not in a voice channel!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}

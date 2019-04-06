@@ -3,7 +3,6 @@ const reload = require("require-reload")(require);
 
 const auth = require("./Configuration/auth.json");
 const config = require("./Configuration/config.json");
-const currentCall = require("./Configuration/currentCall.json");
 
 const client = new Client({
 	disableEveryone: true,
@@ -25,7 +24,7 @@ client.on("message", async msg => {
 	if (!msg.content.startsWith(config.prefix)) return;
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(config.prefix, "");
 	const suffix = msg.content.split(" ").splice(1).join(" ")
-	.trim();
+		.trim();
 
 	let cmdFile;
 	try {
@@ -37,13 +36,17 @@ client.on("message", async msg => {
 	if (cmdFile) return cmdFile(client, msg, suffix);
 });
 
-client.on("voiceStateUpdate", async(oldMember, newMember) => {
+client.on("voiceStateUpdate", async(oldVoice, newVoice) => {
+	let currentCall = reload("./Configuration/currentCall.json");
+	let oldMember = oldVoice.member;
+	let newMember = newVoice.member;
+
 	if (!newMember.voice.channel || newMember.voice.channel.id !== config.private) return;
 	let call = currentCall.find(r => r.status === true);
 	if (!call) return;
-	if (call.owner !== oldMember.user.id || !call.participants.includes(oldMember.user.id)) {
-		if (oldMember.voice.channel.id) return newMember.setVoiceChannel(oldMember.voice.channel.id);
-		newMember.setVoiceChannel(config.squaddy);
+
+	if (call.owner !== oldMember.user.id && !call.participants.includes(oldMember.user.id)) {
+		await newMember.setVoiceChannel(config.mainChannel);
 	}
 });
 
@@ -79,12 +82,14 @@ client.memberSearch = async(string, server, toReturn) => new Promise((resolve, r
 });
 
 setInterval(async() => {
+	const currentCall = require("./Configuration/currentCall.json");
+
 	let call = currentCall.find(s => s.status === true);
 	if (!call) return;
 	let private = client.channels.get(config.private);
 	if (private.members.size >= 1) return;
 	currentCall.splice(currentCall.indexOf(call), 1);
-	client.channels.get("417089769323888641").send("Current private call has been ended as there was nobody in the channel.")
+	client.channels.get("417089769323888641").send("Current private call has been ended as there was nobody in the channel.");
 }, 300000);
 
 client.login(auth.token);

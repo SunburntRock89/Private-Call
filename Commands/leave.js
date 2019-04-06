@@ -1,7 +1,7 @@
 const { writeFileSync } = require("fs");
 const reload = require("require-reload")(require);
 const currentCall = reload("../Configuration/currentCall.json");
-const { version, private, maintainers, squaddy } = require("../Configuration/config.json");
+const { version, private, maintainers, mainChannel } = require("../Configuration/config.json");
 
 module.exports = async(client, msg, suffix) => {
 	let call = currentCall.find(r => r.status === true);
@@ -11,33 +11,16 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "There is no call to end!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
-	if (call.owner === msg.author.id) {
-		return msg.channel.send({
-			embed: {
-				color: 0xFF0000,
-				title: ":x: Error!",
-				description: "You cannot leave this call as you are the owner.",
-				footer: {
-					text: `To end this call, type -end.`,
-				},
-			},
-		});
-	}
+
 	if (msg.member.voice.channel.id !== private) {
 		return msg.channel.send({
 			embed: {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You are not in private!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -49,9 +32,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You are not in the call!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -71,17 +51,19 @@ module.exports = async(client, msg, suffix) => {
 	collector.on("collect", async cmsg => {
 		switch (cmsg.content.toLowerCase()) {
 			case "yes": {
-				msg.member.setVoiceChannel(squaddy);
-				call.participants.splice(call.participants.indexOf(msg.author.id), 1);
+				msg.member.setVoiceChannel(mainChannel);
+				if (call.owner == msg.author.id) {
+					call.owner = call.participants[0];
+				} else {
+					call.participants.splice(call.participants.indexOf(msg.author.id), 1);
+				}
 				writeFileSync("./Configuration/currentCall.json", JSON.stringify(currentCall));
+
 				msg.channel.send({
 					embed: {
 						color: 0x00FF00,
 						title: "Success!",
 						description: "You have successfully left this private call.",
-						footer: {
-							text: version,
-						},
 					},
 				});
 				await collector.stop();

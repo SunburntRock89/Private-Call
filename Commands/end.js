@@ -1,4 +1,4 @@
-const { maintainers, version, squaddy } = require("../Configuration/config.json");
+const { maintainers, version, mainChannel } = require("../Configuration/config.json");
 const { writeFileSync } = require("fs");
 const reload = require("require-reload")(require);
 const currentCall = reload("../Configuration/currentCall.json");
@@ -11,9 +11,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "There is no call to end!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -24,18 +21,15 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You do not have permission to end this call.",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
 	let member = msg.guild.members.get(call.owner);
-	member.setVoiceChannel(squaddy);
+	member.setVoiceChannel(mainChannel);
 	for (let i of call.participants) {
 		try {
 			let m = msg.guild.members.get(i);
-			m.setVoiceChannel(squaddy);
+			m.setVoiceChannel(mainChannel);
 		} catch (err) {
 			// Ignore
 		}
@@ -47,9 +41,6 @@ module.exports = async(client, msg, suffix) => {
 			color: 0x00FF00,
 			title: "Success!",
 			description: "Successfully ended this private call.",
-			footer: {
-				text: version,
-			},
 		},
 	});
 };

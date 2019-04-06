@@ -1,7 +1,7 @@
 const { writeFileSync } = require("fs");
 const reload = require("require-reload")(require);
 const currentCall = reload("../Configuration/currentCall.json");
-const { version, private, maintainers, squaddy } = require("../Configuration/config.json");
+const { version, private, maintainers, mainChannel } = require("../Configuration/config.json");
 
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) {
@@ -10,9 +10,8 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You didn't specifiy anyone to invite!",
-				footer: {
-					text: version,
-				},
+
+
 			},
 		});
 	}
@@ -24,9 +23,8 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "There is no call to invite to!",
-				footer: {
-					text: version,
-				},
+
+
 			},
 		});
 	}
@@ -36,9 +34,7 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You do not have permission to invite people to this call.",
-				footer: {
-					text: version,
-				},
+
 			},
 		});
 	}
@@ -51,9 +47,7 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "Member could not be resolved.",
-				footer: {
-					text: version,
-				},
+
 			},
 		});
 	}
@@ -64,9 +58,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "Member is a bot!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -77,9 +68,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "Member is not in a voice channel!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -90,9 +78,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "Member is already in the call!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}

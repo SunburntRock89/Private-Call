@@ -1,4 +1,4 @@
-const { post } = require("snekfetch");
+const { post } = require("chainfetch");
 const { maintainers, version } = require("../Configuration/config.json");
 
 module.exports = async(client, msg, suffix) => {

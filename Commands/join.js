@@ -1,7 +1,7 @@
 const { writeFileSync } = require("fs");
 const reload = require("require-reload")(require);
 const currentCall = reload("../Configuration/currentCall.json");
-const { version, private, maintainers, squaddy } = require("../Configuration/config.json");
+const { version, private, maintainers, mainChannel } = require("../Configuration/config.json");
 
 module.exports = async(client, msg, suffix) => {
 	let call = currentCall.find(r => r.status === true);
@@ -11,9 +11,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "There is no call to end!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -25,9 +22,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You are not in the call!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -38,9 +32,6 @@ module.exports = async(client, msg, suffix) => {
 				color: 0xFF0000,
 				title: ":x: Error!",
 				description: "You are in private!",
-				footer: {
-					text: version,
-				},
 			},
 		});
 	}
@@ -50,9 +41,6 @@ module.exports = async(client, msg, suffix) => {
 			color: 0x00FF00,
 			title: "Success!",
 			description: "You have successfully joined this private call.",
-			footer: {
-				text: version,
-			},
 		},
 	});
 };

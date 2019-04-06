@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/SunburntRock89/Private-Call#readme",
   "dependencies": {
+    "chainfetch": "^1.2.2",
     "discord.js": "github:Hydrabolt/discord.js",
+    "ffmpeg": "0.0.4",
+    "opusscript": "0.0.6",
     "require-reload": "^0.2.2"
   }
 }
