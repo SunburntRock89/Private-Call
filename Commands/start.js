@@ -25,9 +25,23 @@ module.exports = async({ client, r, serverDoc }, msg, suffix) => {
 		});
 	}
 
+	let privateVCCall = await r.table("Calls").get(serverDoc.channel || "");
+	if (privateVCCall) {
+		return msg.channel.send({
+			embed: {
+				color: 0xFF0000,
+				title: ":x: Error!",
+				description: "There's already a private call!",
+				footer: {
+					text: `Nice try....`,
+				},
+			},
+		});
+	}
+
 	let privateVC;
 	if (serverDoc.channel) {
-		privateVC = client.channels.get(serverDoc.channel);
+		privateVC = await client.channels.get(serverDoc.channel);
 		if (privateVC.members.size >= 1) {
 			return msg.channel.send({
 				embed: {
@@ -44,7 +58,7 @@ module.exports = async({ client, r, serverDoc }, msg, suffix) => {
 
 	let id;
 	if (privateVC) {
-		id = privateVC.channel;
+		id = privateVC.id;
 	} else if (!msg.guild.me.hasPermission("MANAGE_CHANNELS")) {
 		msg.channel.send({
 			embed: {

@@ -40,6 +40,8 @@ module.exports = async(constants, msg) => {
 	const suffix = msg.content.split(" ").splice(1).join(" ")
 		.trim();
 
+	if (cmd == "setup") cmd = "config";
+
 	let cmdFile;
 	try {
 		cmdFile = constants.reload(`./Commands/${cmd}.js`);
