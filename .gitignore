@@ -58,4 +58,4 @@ typings/
 .env
 
 # Discord Authentication File
-Configuration/auth.json
+Configuration/auth.js

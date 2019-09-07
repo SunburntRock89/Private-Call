@@ -1,18 +1,33 @@
-const { writeFileSync } = require("fs");
-const reload = require("require-reload")(require);
-const currentCall = reload("../Configuration/currentCall.json");
-const { version, private, maintainers, mainChannel } = require("../Configuration/config.json");
+module.exports = async({ r, client }, msg, suffix) => {
+	let calls = await r.table("Calls").getAll(msg.author.id, { index: "participants" })
+		.default(null);
 
-module.exports = async(client, msg, suffix) => {
-	let call = currentCall.find(r => r.status === true);
+	let call;
+
+	if (calls.length == 0) {
+		call = await r.table("Calls").getAll([msg.author.id, msg.guild.id], { index: "owner" })
+			.nth(0)
+			.default(null);
+	}
+	if (!call && calls.length == 1) {
+		call = calls[0];
+	}
+
+	let owner;
+	if (calls.length > 1 && suffix) owner = await client.memberSearch(suffix, msg.guild);
+	else owner = client.memberSearch(call.owner, msg.guild);
+
 	if (!call) {
-		return msg.channel.send({
-			embed: {
-				color: 0xFF0000,
-				title: ":x: Error!",
-				description: "There is no call to end!",
-			},
-		});
+		call = calls.find(c => c.owner === owner.id);
+		if (!call) {
+			return msg.channel.send({
+				embed: {
+					color: 0xFF0000,
+					title: ":x: Error!",
+					description: "You aren't in any calls!",
+				},
+			});
+		}
 	}
 
 	let participant = call.participants.find(p => p === msg.author.id);
@@ -21,21 +36,22 @@ module.exports = async(client, msg, suffix) => {
 			embed: {
 				color: 0xFF0000,
 				title: ":x: Error!",
-				description: "You are not in the call!",
+				description: "You are not in a call!",
 			},
 		});
 	}
 
-	if (msg.member.voice.channel.id === private) {
+	if (msg.member.voice.channel.id === call.id) {
 		return msg.channel.send({
 			embed: {
 				color: 0xFF0000,
 				title: ":x: Error!",
-				description: "You are in private!",
+				description: "You are in the call channel already!",
 			},
 		});
 	}
-	msg.member.setVoiceChannel(private);
+
+	msg.member.voice.setChannel(call.id);
 	msg.channel.send({
 		embed: {
 			color: 0x00FF00,

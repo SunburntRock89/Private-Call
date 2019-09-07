@@ -20,7 +20,11 @@
     "chainfetch": "^1.2.2",
     "discord.js": "github:Hydrabolt/discord.js",
     "ffmpeg": "0.0.4",
+    "fs-nextra": "^0.4.5",
     "opusscript": "0.0.6",
-    "require-reload": "^0.2.2"
+    "require-reload": "^0.2.2",
+    "rethinkdbdash": "^2.3.31",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.10.0"
   }
 }

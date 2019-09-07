@@ -1,7 +1,7 @@
 const { post } = require("chainfetch");
-const { maintainers, version } = require("../Configuration/config.json");
+const { maintainers, version } = require("../Configuration/config.js");
 
-module.exports = async(client, msg, suffix) => {
+module.exports = async(constants, msg, suffix) => {
 	if (!maintainers.includes(msg.author.id)) return;
 	if (!suffix) {
 		return msg.channel.send({
@@ -22,10 +22,10 @@ module.exports = async(client, msg, suffix) => {
 		let result = await eval(asyncEval(suffix, suffix.includes("return")));
 		if (typeof result !== "string") result = require("util").inspect(result, false, 1);
 		let array = [
-			client.token.escapeRegex(),
+			constants.client.token.escapeRegex(),
 		];
 		let regex = new RegExp(array.join("|"), "g");
-		result = result.replace(regex, "DID YOU JUST TRY TO BETRAY OUR SOVIET MOTHERLAND?!?!?!?");
+		result = result.replace(regex, "no");
 		if (result.length <= 1980) {
 			msg.channel.send({
 				embed: {

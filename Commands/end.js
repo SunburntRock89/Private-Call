@@ -1,41 +1,45 @@
-const { maintainers, version, mainChannel } = require("../Configuration/config.json");
-const { writeFileSync } = require("fs");
-const reload = require("require-reload")(require);
-const currentCall = reload("../Configuration/currentCall.json");
+module.exports = async({ client, r, config, serverDoc }, msg, suffix) => {
+	let call = await r.table("Calls").getAll([msg.author.id, msg.guild.id], { index: "owner" })
+		.nth(0)
+		.default(null);
 
-module.exports = async(client, msg, suffix) => {
-	let call = currentCall.find(r => r.status === true);
+
+	if (!call && config.maintainers.includes(msg.author.id)) {
+		call = await r.table("Calls").getAll(msg.author.id, { index: "participants" })
+			.nth(0)
+			.default(null);
+	}
+
 	if (!call) {
 		return msg.channel.send({
 			embed: {
 				color: 0xFF0000,
 				title: ":x: Error!",
-				description: "There is no call to end!",
+				description: "You aren't in a call!",
 			},
 		});
 	}
 
-	if (msg.author.id !== call.owner && !maintainers.includes(msg.author.id)) {
-		return msg.channel.send({
-			embed: {
-				color: 0xFF0000,
-				title: ":x: Error!",
-				description: "You do not have permission to end this call.",
-			},
-		});
-	}
-	let member = msg.guild.members.get(call.owner);
-	member.setVoiceChannel(mainChannel);
-	for (let i of call.participants) {
-		try {
-			let m = msg.guild.members.get(i);
-			m.setVoiceChannel(mainChannel);
-		} catch (err) {
-			// Ignore
+	let owner = msg.guild.members.get(call.owner);
+
+	if (serverDoc.channel) {
+		if (owner.voice.channel) owner.voice.setChannel(null);
+		for (let i of call.participants) {
+			try {
+				let m = msg.guild.members.get(i);
+				m.voice.setChannel(null);
+			} catch (err) {
+				// Ignore
+			}
 		}
 	}
-	currentCall.splice(currentCall.indexOf(call), 1);
-	writeFileSync("./Configuration/currentCall.json", JSON.stringify(currentCall));
+
+	await r.table("Calls").get(call.id).delete();
+	if (!serverDoc.channel) {
+		let channel = await client.channels.get(call.id);
+		channel.delete();
+	}
+
 	msg.channel.send({
 		embed: {
 			color: 0x00FF00,
