@@ -51,16 +51,17 @@ let constants;
 	}
 })();
 
-// setInterval(async() => {
-// 	const currentCall = require("./Configuration/currentCall.json");
-
-// 	let call = currentCall.find(s => s.status === true);
-// 	if (!call) return;
-// 	let private = client.channels.get(config.private);
-// 	if (private.members.size >= 1) return;
-// 	currentCall.splice(currentCall.indexOf(call), 1);
-// 	client.channels.get("417089769323888641").send("Current private call has been ended as there was nobody in the channel.");
-// }, 300000);
+setInterval(async() => {
+	let calls = await constants.r.table("Calls");
+	for (let i of calls) {
+		let channel = await constants.client.channels.get(i.id);
+		if (!channel) await constants.r.table("Calls").delete();
+		if (channel.members.size <= 1) {
+			await constants.r.table("Calls").delete();
+			await client.users.get(i.owner).send("Your call was ended as nobody was in the channel.");
+		}
+	}
+}, 300000);
 // TODO: Redo
 
 client.login(require("./Configuration/auth.js").discord.token).catch(e => {
