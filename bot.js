@@ -65,7 +65,10 @@ setInterval(async() => {
 	let calls = await constants.r.table("Calls");
 	for (let i of calls) {
 		let channel = await constants.client.channels.get(i.id);
-		if (!channel) await constants.r.table("Calls").delete();
+		if (!channel) { await constants.r.table("Calls").delete(); } else {
+			await constants.r.table("Calls").delete();
+			client.channels.get(i.id).delete();
+		}
 		if (channel.members.size <= 1) {
 			await constants.r.table("Calls").delete();
 			await client.users.get(i.owner).send("Your call was ended as nobody was in the channel.");
