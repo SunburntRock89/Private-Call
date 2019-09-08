@@ -60,3 +60,7 @@ module.exports = async({ r, client }, msg, suffix) => {
 		},
 	});
 };
+module.exports.info = {
+	name: "join",
+	description: "Lets you rejoin a call channel you have exited.",
+};

@@ -255,7 +255,7 @@ module.exports = async(constants, msg, suffix) => {
 	generateMenu(mainMenu);
 };
 module.exports.info = {
-	name: "Config",
+	name: "config",
 	description: "Allows you to change your server settings.",
 	pack: "Essential",
 	aliases: ["setup"],

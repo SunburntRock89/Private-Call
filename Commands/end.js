@@ -48,3 +48,7 @@ module.exports = async({ client, r, config, serverDoc }, msg, suffix) => {
 		},
 	});
 };
+module.exports.info = {
+	name: "end",
+	description: "Allows you to end your call.",
+};

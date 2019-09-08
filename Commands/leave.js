@@ -1,5 +1,3 @@
-// TODO: TEST EVERY CASE
-
 module.exports = async(constants, msg, suffix) => {
 	let calls = await constants.r.table("Calls").getAll(msg.author.id, { index: "participants" })
 		.default(null);
@@ -111,4 +109,8 @@ module.exports = async(constants, msg, suffix) => {
 			}
 		}
 	});
+};
+module.exports.info = {
+	name: "leave",
+	description: "Allows you to permanently leave a call.",
 };

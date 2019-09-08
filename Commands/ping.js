@@ -7,3 +7,7 @@ module.exports = async({ client }, msg, suffix) => {
 		},
 	});
 };
+module.exports.info = {
+	name: "ping",
+	description: "Shows the latency of the bot to Discord.",
+};

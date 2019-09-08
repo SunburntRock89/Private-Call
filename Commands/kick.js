@@ -90,3 +90,7 @@ module.exports = async({ r, client, config }, msg, suffix) => {
 		},
 	});
 };
+module.exports.info = {
+	name: "kick",
+	description: "Allows you to remove a user from your call.",
+};

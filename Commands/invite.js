@@ -107,3 +107,7 @@ module.exports = async(constants, msg, suffix) => {
 		await constants.r.table("Calls").get(call.id).update({ participants: call.participants });
 	}
 };
+module.exports.info = {
+	name: "invite",
+	description: "Allows you to invite a user to your call.",
+};

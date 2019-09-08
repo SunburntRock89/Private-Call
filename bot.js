@@ -49,6 +49,16 @@ let constants;
 		let name = e.replace(".js", "");
 		client.on(name, (...args) => reload(`./Events/${e}`)(constants, ...args));
 	}
+
+	constants.commands = [];
+
+	let cmds = await readdir("./Commands");
+	for (let i of cmds) {
+		if (!i.endsWith(".js")) continue;
+		let file = require(`./Commands/${i}`);
+		if (!file.info) continue;
+		constants.commands.push(file.info);
+	}
 })();
 
 setInterval(async() => {

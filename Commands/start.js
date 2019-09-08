@@ -111,3 +111,7 @@ module.exports = async({ client, r, serverDoc }, msg, suffix) => {
 
 	await msg.member.voice.setChannel(id);
 };
+module.exports.info = {
+	name: "start",
+	description: "Allows you to start your very own call.",
+};
