@@ -13,7 +13,10 @@ module.exports = async winston => new Promise(async(resolve, reject) => {
 	]
 	
 	let dblist = await r.dbList().run();
-    	for (let i of tables) if (!dblist.includes(i)) await r.dbCreate(auth_1.db.db);
+    	if (!dblist.includes(config.db.db)) await r.dbCreate(config.db.db);
+	
+	let tablelist = await r.tableList().run();
+    	for (let i of tables) if (!tablelist.includes(i)) await r.tableCreate(i).run();
 	
 	await r.branch(r.table("Calls").indexList().contains("owner"), null, r.table("Calls").indexCreate("owner", row => [row("owner"), row("serverID")]));
 	await r.branch(r.table("Calls").indexStatus("owner").nth(0)("ready"), null, r.table("Calls").indexWait("owner"));
