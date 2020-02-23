@@ -7,6 +7,14 @@ const r = require("rethinkdbdash")({
 
 // eslint-disable-next-line no-async-promise-executor
 module.exports = async winston => new Promise(async(resolve, reject) => {
+	let tables = [
+		"Calls",
+		"Servers",
+	]
+	
+	let dblist = await r.dbList().run();
+    	for (let i of tables) if (!dblist.includes(i)) await r.dbCreate(auth_1.db.db);
+	
 	await r.branch(r.table("Calls").indexList().contains("owner"), null, r.table("Calls").indexCreate("owner", row => [row("owner"), row("serverID")]));
 	await r.branch(r.table("Calls").indexStatus("owner").nth(0)("ready"), null, r.table("Calls").indexWait("owner"));
 
